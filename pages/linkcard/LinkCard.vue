@@ -104,13 +104,14 @@ export default {
             this.createForm = {
                 _id: "",
                 title: "",
-                status:"",
                 url: "",
+                status:"",
             }
         },
         openPostModal(isUpdate = false, item) {
             this.isUpdate = isUpdate;
             console.log(this.isUpdate);
+            console.log(this.linkcardList);
             if (this.isUpdate) {
                 this.getCardDetail(item._id)
             }
@@ -162,16 +163,16 @@ export default {
         
         async getCardDetail(id) {
             try {
-                const response = await apiService.get(`note/detail/${id}`);
-                this.createForm = response.data.note;
-                this.linkcard = response.data.note;
+                const response = await apiService.get(`linkcard/detail/${id}`);
+                this.createForm = response.data.linkcards;
+                this.linkcard = response.data.linkcards;
             } catch (error) {
                 this.$toast.error(error);
             }
         },
         async updateCard() {
             try {
-                const response = await apiService.put(`linkcard/update/${this.createForm._id}`, this.createForm);
+                const response = await apiService.put(`linkcard/update/${this.linkcards._id}`, this.createForm);
                 this.$toast.success(response.data.message);
                 console.log(response);
                 this.closePostModal()

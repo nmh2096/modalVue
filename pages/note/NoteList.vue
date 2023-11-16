@@ -143,6 +143,7 @@ export default {
       try {
         const respone = await apiService.get("/note/list");
         this.noteList = respone.data.notes
+        console.log(respone);
       } catch (error) {
         // console.log(error);
         this.$toast.error(error);
