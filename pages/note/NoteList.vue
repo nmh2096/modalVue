@@ -10,7 +10,7 @@
         </div>
         <div class="title-icon">
           <img @click="openPostModal(true, item)" width="20" height="20" :src="edit" alt="logo">
-          <img @click="deletePostModal(true, item)" width="20" height="20" :src="deleteIcon" alt="logo">
+          <img @click="deletePostModal(item)" width="20" height="20" :src="deleteIcon" alt="logo">
         </div>
       </div>
       <div class="badges">
@@ -26,7 +26,7 @@
       <button class="addButton" @click="openPostModal(false)">+</button>
     </div>
 
-    <b-modal v-model="deleteModal" title="Delete Card" ok-title="Submit" @ok="deleteNote">
+    <b-modal v-model="deleteModal" title="Delete Card" ok-title="Submit" @ok="deleteNote" @hidden="cancelModal">
       <p class="my-4">
         Are you sure you want to delete this card!</p>
     </b-modal>
@@ -81,7 +81,7 @@ export default {
       deleteIcon,
       noteList: [],
       note: {},
-      postList: {},
+      postList: [],
       createForm: {
         title: "",
         content: "",
@@ -111,12 +111,6 @@ export default {
         content: "",
         status: "",
       }
-      // this.postList = {
-      //   _id: "",
-      //   title: "",
-      //   content: "",
-      //   status: "",
-      // }
     },
     openPostModal(isUpdate = false, item) {
       this.isUpdate = isUpdate;
@@ -126,11 +120,13 @@ export default {
       }
       this.postModal = true;
     },
-    deletePostModal(deleteModal = false , item) {
-      this.deleteModal = deleteModal;
-      if(this.deleteModal){
-        this.getNoteDetail(item._id)
-      }
+    deletePostModal(item) {
+      this.deleteModal = true
+      this.getNoteDetail(item._id)
+      // this.createModal
+    },
+    cancelModal() {
+      this.resetForm()
     },
     async validateCreateNote(e) {
       e.preventDefault()
@@ -186,12 +182,12 @@ export default {
     },
     async deleteNote() {
       try {
-        const response = await apiService.delete(`note/delete/${this.note._id}`);
-        this.postList = this.postList.filter(item => item.id == response.data.note._id);
-        this.closePostModal()
+        const response = await apiService.delete(`note/delete/${this.createForm._id}`);
+        console.log(response);
+        this.$toast.success = response.data.message;
         this.getNoteList()
       } catch (error) {
-        console.log(error);
+        this.$toast.error(error);
       }
     }
   },

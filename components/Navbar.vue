@@ -4,7 +4,7 @@
 
             <img width="40px" height="30px" :src="logo" alt="logo">
             <router-link to="/note/list">Note</router-link>
-            <router-link to="#">Link card</router-link>
+            <router-link to="/linkcard/list">Link card</router-link>
         </div>
         <div class="user-info">
       <b-dropdown

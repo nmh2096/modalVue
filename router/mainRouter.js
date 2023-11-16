@@ -7,4 +7,12 @@ export const mainRouter = [
             auth:true,
         },
     },
+    {
+        path: 'linkcard/list',
+        name: 'link-card-list',
+        component: () => import("@/pages/linkcard/LinkCard.vue"),
+        meta:{
+            auth:true,
+        },
+    },
 ]
