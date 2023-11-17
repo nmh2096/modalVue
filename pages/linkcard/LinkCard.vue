@@ -1,7 +1,7 @@
 <template>
     <div class='linkcard-container'>
         <div class="link-card" v-for="(item, index) in linkcardList" :key="index"
-            :class="item.status === 'IMPORTANT' ? 'class-danger' : item.status === 'HIGHLIGHT' ? 'class-warn' : 'class-success'">
+            :class="item.status === 'TO LEARN' ? 'class-success' : item.status === 'LEARNING' ? 'class-warn' : 'class-danger'">
             <div class="first">
                 <div class="title">
                     {{ item.title }}
@@ -12,8 +12,9 @@
                 </div>
             </div>
             <div class="badges">
-                <b-badge class="badge-item"
-                    :variant="item.status === 'IMPORTANT' ? 'danger' : item.status === 'HIGHLIGHT' ? 'warning' : 'success'">
+                <b-badge class="badge-item" 
+                    :variant="item.status === 'TO LEARN' ? 'success' : item.status === 'LEARNING' ? 'warning' : 'danger'">
+                    {{ item.status }}
                 </b-badge>
             </div>
             <div class="url">{{ item.url }}</div>
@@ -27,7 +28,7 @@
             <p class="my-4">
                 Are you sure you want to delete this card!</p>
         </b-modal>
-        <b-modal v-model="postModal" :ok-title="isUpdate ? 'Update' : 'Create'" :title="isUpdate ? 'Eidt' : 'Create'"
+        <b-modal v-model="postModal" :ok-title="isUpdate ? 'Update' : 'Create'" :title="isUpdate ? 'Edit' : 'Create'"
             @hidden="closePostModal" @ok="validateCreateCard">
             <!-- <template #modal-title>Create2</template> -->
             <ValidationObserver tag="form" ref="create">
@@ -37,12 +38,12 @@
                         <small class="error">{{ errors[0] }}</small>
                     </b-form-group>
                 </ValidationProvider>
-                <!-- <ValidationProvider rules="required" #default="{ errors }" name="Status">
-                    <b-form-group label="Status">
+                <ValidationProvider rules="required" #default="{ errors }" name="Status">
+                    <b-form-group label="Status" v-if="isUpdate" >
                         <b-form-select v-model="createForm.status" :options="options"></b-form-select>
                         <small class="error">{{ errors[0] }}</small>
                     </b-form-group>
-                </ValidationProvider> -->
+                </ValidationProvider>
                 <ValidationProvider rules="required" #default="{ errors }" name="Url">
                     <b-form-group label="Url">
                         <b-form-input rows="4" v-model="createForm.url" type="text"></b-form-input>
@@ -105,13 +106,12 @@ export default {
                 _id: "",
                 title: "",
                 url: "",
-                status:"",
+                status: "",
             }
         },
         openPostModal(isUpdate = false, item) {
             this.isUpdate = isUpdate;
             console.log(this.isUpdate);
-            console.log(this.linkcardList);
             if (this.isUpdate) {
                 this.getCardDetail(item._id)
             }
@@ -139,9 +139,7 @@ export default {
         async getCardList() {
             try {
                 const respone = await apiService.get("/linkcard/list");
-                console.log(respone);
                 this.linkcardList = respone.data.linkcards
-                console.log(this.linkcardList);
             } catch (error) {
                 console.log(error);
                 this.$toast.error(error);
@@ -160,19 +158,19 @@ export default {
                 this.$toast.error(error);
             }
         },
-        
+
         async getCardDetail(id) {
             try {
                 const response = await apiService.get(`linkcard/detail/${id}`);
-                this.createForm = response.data.linkcards;
-                this.linkcard = response.data.linkcards;
+                this.createForm = response.data.linkcard;
+                this.linkcard = response.data.linkcard;
             } catch (error) {
                 this.$toast.error(error);
             }
         },
         async updateCard() {
             try {
-                const response = await apiService.put(`linkcard/update/${this.linkcards._id}`, this.createForm);
+                const response = await apiService.put(`linkcard/update/${this.linkcard._id}`, this.createForm);
                 this.$toast.success(response.data.message);
                 console.log(response);
                 this.closePostModal()
@@ -191,7 +189,7 @@ export default {
                 this.$toast.error(error);
             }
         }
-        
+
     }
 }
 </script>
