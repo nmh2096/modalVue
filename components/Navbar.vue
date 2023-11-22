@@ -1,10 +1,11 @@
 <template>
     <div class='Navbar-container'>
         <div class="nav-menu">
-
-            <img width="40px" height="30px" :src="logo" alt="logo">
-            <router-link to="/note/list">Note</router-link>
-            <router-link to="/linkcard/list">Link card</router-link>
+            <div class="nav-first">
+                <img style="margin-right:10px ; border-radius: 50%;" width="40px" height="30px" :src="logo" alt="logo">
+                <router-link style="margin-right:10px" to="/note/list">Note</router-link>
+                <router-link to="/linkcard/list">Link card</router-link>
+            </div>
         </div>
         <div class="user-info">
       <b-dropdown
@@ -17,7 +18,7 @@
         <template #button-content>
           <b-avatar variant="primary" text="BV" class="mr-3"></b-avatar>
         </template>
-        <b-dropdown-item href="#">Profile</b-dropdown-item>
+        <b-dropdown-item to="/profile/list">Profile</b-dropdown-item>
         <b-dropdown-item href="#" @click="logout">Log out</b-dropdown-item>
       </b-dropdown>
     </div>
@@ -44,7 +45,8 @@ export default {
         logout() {
             localStorage.removeItem('token');
             this.$router.push({name:'login'});
-        }
+        },
+        
     },
 }
 </script>
@@ -60,4 +62,5 @@ export default {
 .nav-menu{
     gap: 5px;
 }
+
 </style>

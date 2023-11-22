@@ -15,4 +15,12 @@ export const mainRouter = [
             auth:true,
         },
     },
+    {
+        path: 'profile/list',
+        name: 'profile-list',
+        component: () => import("@/pages/profile/Profile.vue"),
+        meta:{
+            auth:true,
+        },
+    },
 ]

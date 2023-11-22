@@ -12,12 +12,21 @@
                 </div>
             </div>
             <div class="badges">
-                <b-badge class="badge-item" 
+                <b-badge class="badge-item"
                     :variant="item.status === 'TO LEARN' ? 'success' : item.status === 'LEARNING' ? 'warning' : 'danger'">
                     {{ item.status }}
                 </b-badge>
             </div>
-            <div class="url">{{ item.url }}</div>
+            <!-- <div class="url" @click="navigation(item)">
+                <p style="cursor: pointer; text-decoration-line: underline ;">
+                    {{ item.url }}
+                </p>
+            </div> -->
+            <div class="url">
+                <a :href="item.url" target="_blank">
+                    {{ item.url }}
+                </a>
+            </div>
         </div>
 
         <div class="footerButton">
@@ -39,7 +48,7 @@
                     </b-form-group>
                 </ValidationProvider>
                 <ValidationProvider rules="required" #default="{ errors }" name="Status">
-                    <b-form-group label="Status" v-if="isUpdate" >
+                    <b-form-group label="Status" v-if="isUpdate">
                         <b-form-select v-model="createForm.status" :options="options"></b-form-select>
                         <small class="error">{{ errors[0] }}</small>
                     </b-form-group>
@@ -114,6 +123,7 @@ export default {
             console.log(this.isUpdate);
             if (this.isUpdate) {
                 this.getCardDetail(item._id)
+                console.log('item',item);
             }
             this.postModal = true;
         },
@@ -125,6 +135,10 @@ export default {
         cancelModal() {
             this.resetForm()
         },
+
+        // navigation(item) {
+        //     window.open(item.url)
+        // },
         async validateCreateCard(e) {
             e.preventDefault()
             const valid = await this.$refs["create"].validate();
