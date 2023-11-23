@@ -43,18 +43,24 @@
                             <small class="error">{{ errors[0] }}</small>
                         </b-form-group>
                     </ValidationProvider>
-                    <ValidationProvider rules="required" #default="{ errors }" name="Mật khẩu">
-                        <b-form-group label="Mật khẩu">
+                    <ValidationProvider rules="required" #default="{ errors }" name="Nhập lại mật khẩu">
+                        <b-form-group label="Nhập lại mật khẩu">
                             <b-form-input v-model="formData.password" type="password"></b-form-input>
                             <small class="error">{{ errors[0] }}</small>
                         </b-form-group>
                     </ValidationProvider>
-                    <ValidationProvider rules="required|confirmed:Mật khẩu" #default="{ errors }" name="Xác nhận mật khẩu">
+                    <!-- <ValidationProvider rules="required" #default="{ errors }" name="Nhập mật khẩu mới">
+                        <b-form-group label="Nhập mật khẩu mới">
+                            <b-form-input v-model="formData.newPassword" type="password"></b-form-input>
+                            <small class="error">{{ errors[0] }}</small>
+                        </b-form-group>
+                    </ValidationProvider> -->
+                    <!-- <ValidationProvider rules="required|confirmed:Mật khẩu" #default="{ errors }" name="Xác nhận mật khẩu">
                         <b-form-group label="Xác nhận mật khẩu">
                             <b-form-input v-model="formData.comfirmPassword" type="password"></b-form-input>
                             <small class="error">{{ errors[0] }}</small>
                         </b-form-group>
-                    </ValidationProvider>
+                    </ValidationProvider> -->
                 </ValidationObserver>
             </b-modal>
 
@@ -116,9 +122,7 @@ export default {
         async getProfile() {
             try {
                 const response = await apiService.get(`/auth`)
-                console.log(response);
                 this.formData = response.data.user
-                console.log(this.formData);
             } catch (error) {
                 console.log(error);
             }
@@ -126,7 +130,7 @@ export default {
 
         async updateProfile() {
             try {
-                const response = await apiService.put(`/profile/${this.formData._id}`, this.formData)
+                const response = await apiService.put(`profile/update/${this.formData._id}`, this.formData)
                 console.log(response);
                 this.closePostModal()
                 this.getProfile()
